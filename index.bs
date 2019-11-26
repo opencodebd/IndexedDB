@@ -3875,12 +3875,11 @@ return **this**'s [=index-handle/index=]'s [=unique flag=].
           {{IDBIndex/getAllEntries()|getAllEntries}}(<var>query</var> [,
           |count|])
     ::
-        Retrieves the [=/keys=] and [=/values=] of [=object-store/records=] matching the given
+        Retrieves the [=/keys=], [=/values=], and index [=/keys=] of [=object-store/records=] matching the given
         [=/key=] or [=key range=] in |query| (up to |count| if given).
 
         If successful, |request|'s {{IDBRequest/result}} will be an
-        [=Array=], with each member being an [=Array=] with a [=/key=]
-        [=/value=] pair.
+        [=Array=], with each member being an [=Array=] with [=/key=], [=/value=], and index [=/key=].
 
     : |request| = |index| .
           {{IDBIndex/count()|count}}(|query|)
@@ -4064,7 +4063,7 @@ method, when invoked, must run these steps:
     with **this** as |source| and
     [=retrieve multiple items from an index=] as |operation|, using
     the [=current Realm=] as |targetRealm|,
-    |index|, |range|, "key+value" as |kind|, and |count| if given.
+    |index|, |range|, "key+value+indexKey" as |kind|, and |count| if given.
 
 </div>
 
@@ -5945,8 +5944,7 @@ with |targetRealm|, |store|, |range|, |kind| and optional |count|, run these ste
           1. Let |key| be the result of running [=convert a key to a value=] with |record|'s key.
           1. Let |serialized| be |record|'s [=/value=].
           1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
-          1. Let |pair| be a [=/list=] containing |key| and |value|.
-          1. [=list/Append=] |pair| convered to a [=sequence&lt;any&gt;=] to |list|.
+          1. [=list/Append=] « |key|, |value| » convered to a [=sequence&lt;any&gt;=] to |list|.
 
     </dl>
 
@@ -6023,13 +6021,13 @@ To <dfn>retrieve multiple items from an index</dfn> with
           1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
           1. [=list/Append=] |value| to |list|.
 
-      : "key+value"
+      : "key+value+indexKey"
       ::
           1. Let |key| be the result of running [=convert a key to a value=] with |record|'s value.
+          1. Let |indexKey| be the result of running [=convert a key to a value=] with |record|'s key.
           1. Let |serialized| be |record|'s [=referenced value=].
           1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
-          1. Let |pair| be a [=/list=] containing |key| and |value|.
-          1. [=list/Append=] |pair| convered to a [=sequence&lt;any&gt;=] to |list|.
+          1. [=list/Append=] « |key|, |value|, |indexKey| » convered to a [=sequence&lt;any&gt;=] to |list|.
 
     </dl>
 
